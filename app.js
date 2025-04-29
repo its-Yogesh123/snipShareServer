@@ -25,19 +25,14 @@ io.on("connection",(client)=>{
     //  mapping during handshake via query
     const uid = client.handshake.query.uid;
     users[uid]=client.id;
-    console.log(uid);
     client.on("code_one_vsClient",(obj)=>{
         const target=users[obj.uid];
         if(target && io.sockets.sockets.has(target)){
             io.to(target).emit("receive_code",obj.code);
-        }else{
-            console.log("User Disconnected");
         }
-        
     });
     // for file
     client.on("vscodeSendFile",(parcel)=>{
-        console.log("code Received ");
         io.to(users[parcel.uid]).emit("receiveFile",parcel);
     });
     // code 
@@ -75,18 +70,14 @@ app.get('/admin',(req,res)=>{
     res.render("index")
 });
 app.post('/generate_token',(req,res)=>{
-    console.log("Token Generation Request");
     const {user}=req.body;
-    console.log(`Uid is ${user.uid} : ${user.name}`);
     const token=activateToken(user);
-    console.log("Token Generation Request end");
     return res.status(200).json({"token":token});
 });
 app.post('/engage',(req,res)=>{
     const token = req.body.token;
     let user = req.body.user;
     if(!user) user={name:req.body.name,uid:req.body.uid};
-    console.log(`Token is ${user.name}  ${token}`);
     if(activeTokens.has(token)){
         const targetUser=activeTokens.get(token);    // get uid of token_generator_user
         const target_socket_id=users[targetUser.uid];

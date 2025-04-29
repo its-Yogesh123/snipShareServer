@@ -1,5 +1,5 @@
 require('dotenv').config(); 
-const http= require("http");
+const http= require("https");
 const express= require("express");
 const path=require("path");
 const PORT=process.env.PORT;
@@ -25,6 +25,7 @@ io.on("connection",(client)=>{
     //  mapping during handshake via query
     const uid = client.handshake.query.uid;
     users[uid]=client.id;
+    console.log("Connection request");
     client.on("code_one_vsClient",(obj)=>{
         const target=users[obj.uid];
         if(target && io.sockets.sockets.has(target)){

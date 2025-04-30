@@ -34,11 +34,11 @@ io.on("connection",(client)=>{
     });
     // for file
     client.on("vscodeSendFile",(parcel)=>{
-        io.to(users[parcel.recipientUID]).emit("receiveFile",parcel);
+        io.to(users[parcel.recipientUID]).emit("receiveFile",parcel.parcel);
     });
     // code 
     client.on("vscodeSendCode",(parcel)=>{
-        io.to(users[parcel.recipientUID]).emit("receiveCode",parcel);
+        io.to(users[parcel.recipientUID]).emit("receiveCode",parcel.parcel);
     });
 });
 //  utility function
